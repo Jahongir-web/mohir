@@ -18,7 +18,7 @@ const model = {
     insert into users (first_name, last_name, username, user_email, password, role_id) values ($1, $2, $3, coalesce($4, null), crypt($5, gen_salt('bf')), $6) returning *
     `
 
-    return row(Sql, name, last_name, username.toLowerCase(), email, password, role)
+    return row(Sql, name, last_name, username, email, password, role)
   },
 
   signIn: ({username, password}) => {
@@ -27,7 +27,7 @@ const model = {
     select * from users
     where username = $1 and password = crypt($2, password)
    `
-   return row(Sql, username.toLowerCase(), password)
+   return row(Sql, username, password)
   },
 
   signUpGoogle: ({given_name, family_name, picture, email, sub}) => {
