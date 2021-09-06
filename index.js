@@ -8,6 +8,7 @@ const admin = require("./src/modules/admin/routes")
 const teacher = require("./src/modules/teacher/routes")
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const cors = require('cors')
 
 
 
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 4001
 app.use(express.json())
 app.use(fileUpload())
 app.use(express.urlencoded({extended: true}))
+app.use(cors())
 
 
 app.use((_, res, next) => {
