@@ -38,7 +38,6 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
         res.send(accessToken).status(201)
       }
     }
-
   } catch (error) {
     console.log(error.message);
     res.statusMessage = error.message
