@@ -21,7 +21,7 @@ router.use(passport.initialize())
 
 router.get('/login/google', passport.authenticate('google', {scope:['profile email']}))
 
-router.get('/google', passport.authenticate('google'), async(req, res) => {
+router.get('http://localhost:3000/login', passport.authenticate('google'), async(req, res) => {
   
   const data = req.user._json
 
