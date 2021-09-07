@@ -50,7 +50,7 @@ const GOOGLE_CLIENT_SECRET = 'lZ3qPQe9_T0rJEzexeCegav5'
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://mohir-server.herokuapp.com/google'
+  callbackURL: 'https://localhost:3000/login'
 }, (accessToken, refreshToken, profile, callback) => {
   callback(null, profile)
 }))
