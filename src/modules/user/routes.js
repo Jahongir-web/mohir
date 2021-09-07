@@ -22,7 +22,7 @@ router.use(passport.initialize())
 router.get('/login/google', passport.authenticate('google', {scope:['profile email']}))
 
 router.get('/google', passport.authenticate('google'), async(req, res) => {
-  res.redirect('/')
+  
   const data = req.user._json
 
   try {
@@ -30,12 +30,12 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
     console.log(user);
     if(user){
       const accessToken = await sign(user)      
-      res.send(accessToken).status(201)
+      res.redirect('/').send(accessToken).status(201)
     } else {
       const user = await model.signUpGoogle(data)
       if(user){
         const accessToken = await sign(user)      
-        res.send(accessToken).status(201)
+        res.redirect('/').send(accessToken).status(201)
       }
     }
 
