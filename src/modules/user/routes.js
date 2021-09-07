@@ -19,7 +19,7 @@ const router = Router()
 router.use(passport.initialize())
 // router.use(passport.session())
 
-router.post('/login/google', passport.authenticate('google', {scope:['profile email']}))
+router.get('/login/google', passport.authenticate('google', {scope:['profile email']}))
 
 router.get('/google', passport.authenticate('google'), async(req, res) => {
   
