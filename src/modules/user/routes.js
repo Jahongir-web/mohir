@@ -19,7 +19,9 @@ const router = Router()
 router.use(passport.initialize())
 // router.use(passport.session())
 
-router.get('/login/google', passport.authenticate('google', {scope:['profile email']}), async(req, res) => {
+router.get('/login/google', passport.authenticate('google', {scope:['profile email']}))
+
+router.get('/google', passport.authenticate('google'), async(req, res) => {
   
   const data = req.user._json
 
@@ -36,36 +38,13 @@ router.get('/login/google', passport.authenticate('google', {scope:['profile ema
         res.send(accessToken).status(201)
       }
     }
+
   } catch (error) {
     console.log(error.message);
     res.statusMessage = error.message
     res.status(403).end()
   }
 })
-
-// router.get('/google', passport.authenticate('google'), async(req, res) => {
-  
-//   const data = req.user._json
-
-//   try {
-//     const user = await model.signInGoogle(data)
-//     console.log(user);
-//     if(user){
-//       const accessToken = await sign(user)      
-//       res.send(accessToken).status(201)
-//     } else {
-//       const user = await model.signUpGoogle(data)
-//       if(user){
-//         const accessToken = await sign(user)      
-//         res.send(accessToken).status(201)
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//     res.statusMessage = error.message
-//     res.status(403).end()
-//   }
-// })
 
 
 
