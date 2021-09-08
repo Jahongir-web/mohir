@@ -8,6 +8,7 @@ const admin = require("./src/modules/admin/routes")
 const teacher = require("./src/modules/teacher/routes")
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
 const cors = require('cors')
 
 
@@ -47,10 +48,24 @@ app.use("/teacher", teacher)
 const GOOGLE_CLIENT_ID = '963699870941-ekuvu9v5sd9590ui6nv2e3slo189bpou.apps.googleusercontent.com'
 const GOOGLE_CLIENT_SECRET = 'lZ3qPQe9_T0rJEzexeCegav5'
 
+
+const FACEBOOK_CLIENT_ID = '238030234853637'
+const FACEBOOK_CLIENT_SECRET = '56314ce157eff44f5cbbf0865af03a14'
+
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: 'https://mohir-server.herokuapp.com/google'
+}, (accessToken, refreshToken, profile, callback) => {
+  callback(null, profile)
+}))
+
+
+passport.use(new FacebookStrategy({
+  clientID: FACEBOOK_CLIENT_ID,
+  clientSecret: FACEBOOK_CLIENT_SECRET,
+  callbackURL: 'https://mohir-server.herokuapp.com/facebook',
+  profileFields: ['emails', 'displayName', 'name', 'picture']
 }, (accessToken, refreshToken, profile, callback) => {
   callback(null, profile)
 }))

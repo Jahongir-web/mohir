@@ -47,6 +47,12 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
 })
 
 
+router.get('/login/facebook', passport.authenticate('facebook', {scope:['email']}))
+
+router.get('/facebook', passport.authenticate('facebook'), (req, res) => {
+  res.redirect('/')
+})
+
 
 
 router.post("/signup", async (req, res) => {
