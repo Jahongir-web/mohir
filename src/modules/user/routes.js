@@ -50,6 +50,7 @@ router.get('/login/facebook', passport.authenticate('facebook', {scope:['email']
 
 router.get('/facebook', passport.authenticate('facebook'), (req, res) => {
   // res.redirect('/')
+  res.send(req.user)
 })
 
 
