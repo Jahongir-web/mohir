@@ -1,9 +1,8 @@
 const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
 const Router = require("express").Router
 const { model } = require("./models")
 const {sign, verify} = require("../../../function/jwt")
-const expressSession = require('express-session')
+// const expressSession = require('express-session')
 
 
 const router = Router()
@@ -50,7 +49,7 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
 router.get('/login/facebook', passport.authenticate('facebook', {scope:['email']}))
 
 router.get('/facebook', passport.authenticate('facebook'), (req, res) => {
-  res.redirect('/')
+  // res.redirect('/')
 })
 
 
