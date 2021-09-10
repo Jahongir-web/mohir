@@ -53,12 +53,12 @@ router.get("/categories", async (req, res) => {
 
 })
 
-router.get('/courses', async (req, res) => {
+// router.get('/courses', async (req, res) => {
 
-    const {sana} = await model.courses()
+//     const {sana} = await model.courses()
 
-    res.send(moment(sana).calendar())
-})
+//     res.send(moment(sana).calendar())
+// })
 
 
 
