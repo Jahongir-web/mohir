@@ -53,7 +53,7 @@ router.get('/courses', async (req, res) => {
 })
 
 
-router.get('/freecourses', async (req, res) => {
+router.get('/free/courses', async (req, res) => {
     try{
         const data = await model.freeCourses()
         if(data){
@@ -67,12 +67,29 @@ router.get('/freecourses', async (req, res) => {
     }
 })
 
-router.get('/course/search', async (req, res) => {
+router.get('/free/courses/:id', async (req, res) => {
 
-    const {text} = req.body
-    console.log(req.body);
+    const { id } = req.params
+
     try{
-        const data = await model.searchCourses(text)
+        const data = await model.freeCoursesByCategory(id)
+        if(data){
+            res.send(data)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(403).end()
+    }
+})
+
+router.get('/course/search?:title', async (req, res) => {
+
+    const {title} = req.query
+    
+    try{
+        const data = await model.searchCourses(title)
         if(data){
             res.send(data)
         }
