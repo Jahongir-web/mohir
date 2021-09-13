@@ -22,7 +22,7 @@ router.get('/login/google', passport.authenticate('google', {scope:['profile ema
 
 router.get('/google', passport.authenticate('google'), async(req, res) => {
 
-  res.redirect('/')
+  // res.redirect('/')
   
   const data = req.user._json
 

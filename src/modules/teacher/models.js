@@ -2,13 +2,13 @@ const {row, rows} = require("../../../database/pg")
 
 
 const model = {
-    addCourse: ({data: {title, info, lavel, tags, category_id, price}, imgName}) => {
+    addCourse: ({data: {title, info, level, tags, category_id, price}, imgName}) => {
      
      const sql = `insert into courses 
-     (course_name, course_info, course_image, course_lavel, course_tags, course_price, category_id) 
+     (course_name, course_info, course_image, course_level, course_tags, course_price, category_id) 
      values ($1, coalesce($2, null), coalesce($3, null), $4, coalesce($5, null), $6, $7) returning *`
 
-     return row(sql, title, info, imgName, lavel, tags, price, category_id)
+     return row(sql, title, info, imgName, level, tags, price, category_id)
 
     },
     addAuthor: (author_id, course_id) => {
