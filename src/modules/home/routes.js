@@ -7,8 +7,7 @@ require("moment/locale/uz-latn")
 const router = Router()
 
 router.get("/", async (req, res) => {
-    const {token} = req.headers
-    
+    const {token} = req.headers    
     try{
         if(token){
             const user = await verify(token)            
@@ -67,10 +66,23 @@ router.get('/free/courses', async (req, res) => {
     }
 })
 
+router.get('/my/courses/:id', async (req, res) => {
+    const {id} = req.params
+    try{
+        const data = await model.MyCourses(id)
+        if(data){
+            res.send(data)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(403).end()
+    }
+})
+
 router.get('/free/courses/:id', async (req, res) => {
-
     const { id } = req.params
-
     try{
         const data = await model.freeCoursesByCategory(id)
         if(data){
@@ -85,9 +97,7 @@ router.get('/free/courses/:id', async (req, res) => {
 })
 
 router.get('/course/search?:title', async (req, res) => {
-
-    const {title} = req.query
-    
+    const {title} = req.query    
     try{
         const data = await model.searchCourses(title)
         if(data){
@@ -103,7 +113,6 @@ router.get('/course/search?:title', async (req, res) => {
 
 
 router.get('/courses/:id', async (req, res) => {
-
     const {id} = req.params
     console.log(id);
     try{
