@@ -22,7 +22,6 @@ const rows = async (SQL, ...params) => {
     const {rows} = await client.query(SQL, params)
 
     return rows
-
   }
   catch(err){
 

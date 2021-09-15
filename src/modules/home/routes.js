@@ -66,7 +66,7 @@ router.get('/free/courses', async (req, res) => {
     }
 })
 
-router.get('/my/courses/:id', async (req, res) => {
+router.get('/mycourses/:id', async (req, res) => {
     const {id} = req.params
     try{
         const data = await model.MyCourses(id)
@@ -128,6 +128,22 @@ router.get('/courses/:id', async (req, res) => {
     }
 })
 
+// FILTER COURSES
+
+router.get('/filter/courses?:id?:level?:price', async (req, res) => {
+    const {id, level, price} = req.query
+    try{
+        const data = await model.filterCourses(id, level, price)
+        if(data){
+            res.send(data)
+        }        
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(403).end()
+    }
+})
 
 
 module.exports = router;
