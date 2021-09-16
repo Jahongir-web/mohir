@@ -81,7 +81,7 @@ router.get('/mycourses/:id', async (req, res) => {
     }
 })
 
-router.get('/free/courses/:id', async (req, res) => {
+router.get('/free/courses/category/:id', async (req, res) => {
     const { id } = req.params
     try{
         const data = await model.freeCoursesByCategory(id)
