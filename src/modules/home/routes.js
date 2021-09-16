@@ -112,7 +112,7 @@ router.get('/course/search?:title', async (req, res) => {
 })
 
 
-router.get('/courses/:id', async (req, res) => {
+router.get('/courses/category/:id', async (req, res) => {
     const {id} = req.params
     console.log(id);
     try{
