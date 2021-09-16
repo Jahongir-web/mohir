@@ -120,6 +120,21 @@ router.post("/login", async (req, res) => {
   }
 })
 
+router.get('/users/mycourses/:id', async (req, res) => {
+  const {id} = req.params
+  try{
+      const data = await model.MyCourses(id)
+      if(data){
+          res.send(data)
+      }
+  }
+  catch(err){
+      console.log(err)
+      res.statusMessage = err.message
+      res.status(403).end()
+  }
+})
+
 module.exports = router;
 
 
