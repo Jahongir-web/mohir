@@ -24,17 +24,17 @@ const model = {
 
         return row(sql, id)
     },
-    addTopic: (topic_name, course_id) => {
 
+    addTopic: (topic_name, course_id) => {
         const sql = `insert into topics (topic_name, course_id) values ($1, $2) returning *` 
 
         return row(sql, topic_name, course_id)
     },
-    addVideo: ({video_name, video_link, topic_id, user_id, course_id}) => {
 
-        const sql = `insert into videos (video_name, video_link, topic_id, user_id, course_id) values ($1, $2, $3, $4, $5) returning *`
+    addVideo: (title, link, topic_id, material, info) => {
+        const sql = `insert into videos (video_name, video_link, topic_id, video_material, video_info) values ($1, $2, $3, coalesce($4, null), coalesce($5, null)) returning *`
 
-        return row(sql, video_name, video_link, topic_id, user_id, course_id)
+        return row(sql, title, link, topic_id, material, info)
     },
     
 }

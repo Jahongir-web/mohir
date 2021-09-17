@@ -4,10 +4,11 @@ const { v4 } = require("uuid")
 const { model } = require("./models")
 const {sign, verify} = require("../../../function/jwt")
 
-const uploadsDir = path.join(__dirname, "../../static/images")
+const uploadsDir = path.join(__dirname, "../../static/files")
 
 const router = Router()
 
+// Add Course
 router.post("/course", async (req, res) => {
     const data = req.body
     const {author_id} = req.body
@@ -24,17 +25,15 @@ router.post("/course", async (req, res) => {
         })
         const course = await model.addCourse({data, imgName})
         
-        if(course){
-            
+        if(course){            
             const authors = await model.addAuthor(author_id, course.course_id)
-            
             res.send({course, authors})
         }    
     }
     catch(err){
         console.log(err)
         res.statusMessage = err.message
-        res.status(403).end()
+        res.status(400).end()
     }
 })
 
@@ -51,7 +50,7 @@ router.delete("/course/:id", async (req, res) => {
     catch(err){
         console.log(err)
         res.statusMessage = err.message
-        res.status(403).end()
+        res.status(400).end()
     }
 })
 
@@ -69,24 +68,42 @@ router.post("/topic", async (req, res) => {
     catch(err){
         console.log(err)
         res.statusMessage = err.message
-        res.status(403).end()
+        res.status(400).end()
     }
 })
 
 router.post("/video", async (req, res) => {
 
-    const data = req.body
-
+    const {title, link, topic_id, info} = req.body
+    
     try{
-        const newVideo = await model.addVideo(data) 
+        const {material} = req.files
+        const fileName = material.size + '.' + material.name
+
+        material.mv(path.join(uploadsDir, fileName), (error) => {            
+            if(error){
+                console.log(error)
+            }
+        })
+
+        const newVideo = await model.addVideo(title, link, topic_id, fileName, info) 
         if(newVideo){
             res.send(newVideo)
         }
     }
-    catch(err){
-        console.log(err)
-        res.statusMessage = err.message
-        res.status(403).end()
+    catch(err){    
+        try {
+            const newVideo = await model.addVideo(title, link, topic_id, fileName = null, info) 
+            if(newVideo){
+                res.send(newVideo)            
+            }else{
+                res.status(400).end()
+            }
+        } catch (err) {
+            console.error(err.message);
+            res.statusMessage = err.message
+            res.status(400).end()
+        } 
     }
 })
 

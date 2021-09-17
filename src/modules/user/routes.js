@@ -4,9 +4,7 @@ const { model } = require("./models")
 const {sign, verify} = require("../../../function/jwt")
 // const expressSession = require('express-session')
 
-
 const router = Router()
-
 
 // router.use(expressSession({
 //   secret: 'mohirdev',
@@ -14,15 +12,12 @@ const router = Router()
 //   saveUninitialized: true
 // }))
 
-
 router.use(passport.initialize())
 // router.use(passport.session())
 
 router.get('/login/google', passport.authenticate('google', {scope:['profile email']}))
 
 router.get('/google', passport.authenticate('google'), async(req, res) => {
-
-  // res.redirect('/')
   
   const data = req.user._json
 
@@ -47,7 +42,6 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
   }
 })
 
-
 router.get('/login/facebook', passport.authenticate('facebook', {scope:['email']}))
 
 router.get('/facebook', passport.authenticate('facebook'), (req, res) => {
@@ -55,62 +49,43 @@ router.get('/facebook', passport.authenticate('facebook'), (req, res) => {
   res.send(req.user)
 })
 
-
-
 router.post("/signup", async (req, res) => {
-
-    const data = req.body
- 
-    try{
-     
-      const checkUsername = await model.checkUsername(data)
-      const checkEmail = await model.checkEmail(data)
-      if(checkUsername && checkEmail){
-        res.status(400).send("These are email and username already exist")
-      } else if(checkEmail){
-        res.status(400).send("This is email already exist")
-      } else if(checkUsername){
-      
-        res.status(400).send("This is username already exist")
-      }
-                
-      else{
-
-        const user = await model.signUP(data)
-        const accessToken = await sign(user)
-        
-        res.send(accessToken).status(201)
-        
-      }
-
-          
+  const data = req.body
+   try{   
+    const checkUsername = await model.checkUsername(data)
+    const checkEmail = await model.checkEmail(data)
+    if(checkUsername && checkEmail){
+      res.status(400).send("These are email and username already exist")
+    } else if(checkEmail){
+      res.status(400).send("This is email already exist")
+    } else if(checkUsername){
+      res.status(400).send("This is username already exist")
     }
-    catch(err){
-      console.log(err)
-      res.statusMessage = err
-      res.status(401).end()
-      
-    }
-
-   
+              
+    else{
+      const user = await model.signUP(data)
+      const accessToken = await sign(user)      
+      res.send(accessToken).status(201)      
+    }        
+  }
+  catch(err){
+    console.log(err)
+    res.statusMessage = err
+    res.status(401).end()    
+  } 
 })
 
 router.post("/login", async (req, res) => {
-
-    const data = req.body
-
+  const data = req.body
   try{
     const user = await model.signIn(data)
     if(user){
-
       const accessToken = await sign(user)
-
-        res.send(accessToken)
+      res.send(accessToken)
     }
     else{
       res.send("not user")
     }
-
   }
   catch(err){
 
