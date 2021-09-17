@@ -110,6 +110,21 @@ router.get('/users/mycourses/:id', async (req, res) => {
   }
 })
 
+router.post('/users/course/comment', async (req, res) => {
+  const {user_id, course_id, content} = req.body
+  try{
+      const comment = await model.addComment(user_id*1, course_id*1, content)
+      if(comment){
+        res.send(comment)
+      }
+  }
+  catch(err){
+      console.log(err)
+      res.statusMessage = err.message
+      res.status(400).end()
+  }
+})
+
 module.exports = router;
 
 

@@ -38,6 +38,37 @@ router.post("/course", async (req, res) => {
 })
 
 
+router.post("/course/author", async (req, res) => {
+    const {user_id, course_id} = req.body
+        
+    try{
+        const author = await model.addAuthor(user_id*1, course_id*1)
+        res.send(author)  
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+// Update Course
+
+router.put("/course", async (req, res) => {
+    const {course_id, intro_link, duration, course_profit, course_requirement, for_who} = req.body
+        
+    try{
+        const course = await model.updateCourse(course_id, intro_link, duration, course_profit, course_requirement, for_who)
+        res.send(course)
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
 router.delete("/course/:id", async (req, res) => {
     const {id} = req.params
     try{

@@ -18,6 +18,13 @@ const model = {
         return rows(sql)
     },
 
+    courseItem: () => {
+        const sql = `
+        
+        `
+        return rows(sql)
+    },
+
     freeCourses: () => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
