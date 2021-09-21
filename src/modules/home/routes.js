@@ -58,10 +58,11 @@ router.get('/courses', async (req, res) => {
 router.get('/course/:id', async (req, res) => {
     const {id} = req.params
     try{
+        const course = await model.courseItem(id*1)
 
-        const data = await model.courseAuthors(id*1)
-        if(data){
-            res.send(data)
+        const authors = await model.courseAuthors(id*1)
+        if(course){
+            res.send({course, authors})
         }
     }
     catch(err){
