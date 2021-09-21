@@ -10,8 +10,7 @@ const router = Router()
 
 // Add Course
 router.post("/course", async (req, res) => {
-    const data = req.body
-    const {author_id} = req.body
+    const {title, info, level, tags, category_id, price, author_id} = req.body
         
     try{
         const photo = req.files.photo
@@ -23,10 +22,10 @@ router.post("/course", async (req, res) => {
                 console.log(error)
             }
         })
-        const course = await model.addCourse({data, imgName})
+        const course = await model.addCourse(title, info, level, tags, category_id*1, price, author_id*1, imgName)
         
         if(course){            
-            const authors = await model.addAuthor(author_id, course.course_id)
+            const authors = await model.addAuthor(author_id*1, course.course_id)
             res.send({course, authors})
         }    
     }
@@ -38,6 +37,7 @@ router.post("/course", async (req, res) => {
 })
 
 
+// Add Author 
 router.post("/course/author", async (req, res) => {
     const {user_id, course_id} = req.body
         
@@ -58,7 +58,7 @@ router.put("/course", async (req, res) => {
     const {course_id, intro_link, duration, course_profit, course_requirement, for_who} = req.body
         
     try{
-        const course = await model.updateCourse(course_id, intro_link, duration, course_profit, course_requirement, for_who)
+        const course = await model.updateCourse(course_id*1, intro_link, duration, course_profit, course_requirement, for_who)
         res.send(course)
     }
     catch(err){
@@ -68,14 +68,17 @@ router.put("/course", async (req, res) => {
     }
 })
 
-
+// Delete course
 router.delete("/course/:id", async (req, res) => {
     const {id} = req.params
     try{
-        const deleteCourse = await model.deleteCourse(id)
+        const deleteAuthor = await model.deleteAuthor(id*1)
+        const deleteCourse = await model.deleteCourse(id*1)
         
         if(deleteCourse){   
             res.send(deleteCourse)
+        } else{
+            res.status(400)
         }        
     }
     catch(err){
@@ -86,11 +89,11 @@ router.delete("/course/:id", async (req, res) => {
 })
 
 
-
+// Add topic
 router.post("/topic", async (req, res) => {
     const {topic_name, course_id} = req.body
     try{ 
-        const topic = await model.addTopic(topic_name, course_id)
+        const topic = await model.addTopic(topic_name, course_id*1)
         
         if(topic){    
             res.send(topic)
@@ -103,10 +106,26 @@ router.post("/topic", async (req, res) => {
     }
 })
 
-router.post("/video", async (req, res) => {
+// Delete topic
+router.delete("/topic/:id", async (req, res) => {
+    const {id} = req.params
+    try{ 
+        const topic = await model.deleteTopic(id*1)
+        
+        if(topic){    
+            res.send(topic)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
 
-    const {title, link, topic_id, info} = req.body
-    
+// Add video
+router.post("/video", async (req, res) => {
+    const {title, link, topic_id, info} = req.body    
     try{
         const {material} = req.files
         const fileName = material.size + '.' + material.name
@@ -117,14 +136,14 @@ router.post("/video", async (req, res) => {
             }
         })
 
-        const newVideo = await model.addVideo(title, link, topic_id, fileName, info) 
+        const newVideo = await model.addVideo(title, link, topic_id*1, fileName, info) 
         if(newVideo){
             res.send(newVideo)
         }
     }
     catch(err){    
         try {
-            const newVideo = await model.addVideo(title, link, topic_id, fileName = null, info) 
+            const newVideo = await model.addVideo(title, link, topic_id*1, fileName = null, info) 
             if(newVideo){
                 res.send(newVideo)            
             }else{
@@ -135,6 +154,25 @@ router.post("/video", async (req, res) => {
             res.statusMessage = err.message
             res.status(400).end()
         } 
+    }
+})
+
+// Delete video
+router.delete("/video/:id", async (req, res) => {
+    const {id} = req.params
+    try{ 
+        const video = await model.deleteVideo(id*1)
+        
+        if(video){    
+            res.send(video)
+        }else{
+            res.status(400)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
     }
 })
 

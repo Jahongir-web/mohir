@@ -84,7 +84,7 @@ router.post("/login", async (req, res) => {
       res.send(accessToken)
     }
     else{
-      res.send("not user")
+      res.status(401).send("login yoki parol xato")
     }
   }
   catch(err){
