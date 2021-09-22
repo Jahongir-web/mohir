@@ -54,7 +54,7 @@ router.get('/courses', async (req, res) => {
     }
 })
 
-// Get all Authors course
+// Get course item chala
 router.get('/course/:id', async (req, res) => {
     const {id} = req.params
     try{

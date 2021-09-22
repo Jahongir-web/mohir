@@ -95,6 +95,7 @@ router.post("/login", async (req, res) => {
   }
 })
 
+// Get user's courses
 router.get('/users/mycourses/:id', async (req, res) => {
   const {id} = req.params
   try{
@@ -110,6 +111,7 @@ router.get('/users/mycourses/:id', async (req, res) => {
   }
 })
 
+// To Add comment to course
 router.post('/users/course/comment', async (req, res) => {
   const {user_id, course_id, content} = req.body
   try{

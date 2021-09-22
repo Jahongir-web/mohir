@@ -158,29 +158,33 @@ create table comments (
 
 -- // These were done
 
-
--- // POST: signup("/signup"),
--- // POST: login("/login"),
--- // POST: addCategory("/admin/category"),
--- // POST: addTopic("/teacher/topic"),
--- // POST: addCourse("/teacher/course"),
--- // POST: addVideo("/teacher/video"),
--- // GET: allCategory("/categories"),
--- // DELETE: deleteCategory("/admin/category/:id"),
--- // DELETE: deleteCouse("/teacher/course/:id")
+-- // POST: signup("/signup"), 
+-- // POST: login("/login"), 
+-- // POST: addCategory("/admin/category"), 
+-- // DELETE: deleteCategory("/admin/category/id"), 
+-- // POST: addTopic("/teacher/topic"), 
+-- // DELETE: deleteTopic("/teacher/topic/id"), 
+-- // POST: addCourse("/teacher/course"), 
+-- // PUT: updateCourse("/teacher/course"), 
+-- // POST: addAuthorsToCourse("/teacher/course/author"), 
+-- // POST: addVideo("/teacher/video"), 
+-- // DELETE: deleteVideo("/teacher/video/id"), 
+-- // GET: allCategory("/categories"), 
+-- // DELETE: deleteCouse("/teacher/course/:id"), 
+-- // GET: Search("/search/course?:title"), 
+-- // GET: allCourses("/courses"), 
+-- // GET: coursesByCategory("/courses/category/id"), 
+-- // Get: freeCoursesByCategory("/free/courses/category/id"), 
+-- // Get: freeCourses("/free/courses"), 
+-- // GET: myCourse("/users/mycourses/:userId"), 
+-- // GET: filterCourses("/filter/courses?id=2&level=2&price=0"), 
+-- // POST: commentAboutCourse("/users/course/comment") 
 
 -- // these have to do 
-
--- // GET: Search("/course/search"),
--- // GET: courseByCategory("/courses/:categoryId"),
--- // Get: freeCourses("/free/courses/:categoryId"),
 -- // GET: userComments("/comments"),
 -- // GET: allBlogs("/blogs"),
--- // GET: myCourse("/mycourse")
 -- // GET: itemCourse("/user/course/:courseId"),
 -- // GET: commentAboutCourse("/user/comment/:id"),
--- // GET: sameCourse("/user/course/:categoryId"),
+
 -- // GET: teacherPage("/user/teacher/:userId")
--- // POST: loginByFacebook(),
--- // POST: commentAboutCourse("/user/comment")
 
