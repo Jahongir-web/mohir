@@ -22,16 +22,37 @@ const model = {
         const sql = `
         select courses.course_id,
         course_name,course_intro_video,course_level,
-        course_duration, course_price, c.category_name, count(video_name) as video_count, course_profit, course_requirements, course_for_who from courses left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id  where courses.course_id = $1 group by course_name, courses.course_id, c.category_id
+        course_duration, course_price, c.category_name, c.category_id, count(video_name) as video_count, course_profit, course_requirements, course_for_who from courses left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id  where courses.course_id = $1 group by course_name, courses.course_id, c.category_id
+        `
+        return row(sql, id)
+    },
+
+    courseAuthorsId: (id) => {
+        const sql = `
+        select u.user_id from course_author join users as u on u.user_id = course_author.user_id join 
+        courses as c on c.course_id = course_author.course_id where c.course_id = $1
         `
         return rows(sql, id)
     },
 
-    courseAuthors: (id) => {
+    courseTopics: (id) => {
         const sql = `
-                select u.user_id, c.course_id, u.first_name, u.last_name, u.user_avatar, u.facebook, u.telegram, u.linked_in, 
-                u.instagram, u.role_id from course_author join users as u on u.user_id = course_author.user_id join 
-                courses as c on c.course_id = course_author.course_id where c.course_id = $1
+        select * from topics where course_id = $1
+        `
+        return rows(sql, id)
+    },
+
+    courseComments: (id) => {
+        const sql = `
+        select u.user_id, (u.first_name || ' ' || u.last_name) as fullname, u.username, u.user_avatar, c.comment_id, c.comment_content, to_char(c.created_at, 'DD.MM.YYYY | HH24:MI') as date from comments as c
+         join users as u using(user_id) where course_id = $1
+        `
+        return rows(sql, id)
+    },
+
+    courseVideos: (id) => {
+        const sql = `
+        select t.topic_id, v.video_id, v.video_name, v.video_link, v.video_info, v.video_material, v.video_duration from courses as c left join topics as t on c.course_id = t.course_id left join videos as v on t.topic_id = v.topic_id where c.course_id = $1
         `
         return rows(sql, id)
     },
@@ -76,6 +97,20 @@ const model = {
         FROM categories) END AND CASE WHEN 0 <= $2 THEN course_level = $2 ELSE course_level = ANY(select course_level from courses) END AND CASE WHEN 1 = $3 THEN course_price > 0 WHEN 0 = $3 THEN course_price = 0 ELSE course_price >= 0 END group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id desc limit 60`
 
         return rows(sql, id, level, price)  
+    },
+    
+    getTeacher: (id) => {
+        const sql = `select users.user_id, user_avatar, (first_name || ' ' || last_name) as fullname, facebook, telegram, linked_in, instagram, user_info, (select count(c.course_name) from users join course_author as a on a.user_id = users.user_id join courses as c on c.course_id = a.course_id where users.user_id = $1) as count_course, count(p.course_id) as students from users join course_author as a on a.user_id = users.user_id join courses as c on c.course_id = a.course_id join purchases as p on p.course_id = a.course_id where users.user_id = $1 group by users.user_id
+        `
+        return row(sql, id)
+    },
+
+    getTeacherCourses: (id) => {
+        const sql = `select courses.course_id,
+        course_name,course_image,course_level,
+        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join course_author on course_author.course_id = courses.course_id left join users as u on course_author.user_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where u.user_id = $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id asc limit 40
+        `
+        return rows(sql, id)
     }    
 }
 

@@ -60,13 +60,43 @@ router.get('/course/:id', async (req, res) => {
     try{
         const course = await model.courseItem(id*1)
 
-        const authors = await model.courseAuthors(id*1)
+        const authors_id = await model.courseAuthorsId(id*1)
+        let authors = []
+        await authors_id.forEach(async(item) => {
+            const teacher = await model.getTeacher(item.user_id)
+            authors.push(teacher)
+        })
+        const topics = await model.courseTopics(id*1)
+        const videos = await model.courseVideos(id*1)
+        const comments = await model.courseComments(id*1)
+        const similar_courses = await model.coursesByCategoryId(course.category_id)
         if(course){
-            res.send({course, authors})
+            res.send({course, topics, videos, authors, comments, similar_courses})
         }
     }
     catch(err){
         console.log(err)
+        res.statusMessage = err.message
+        res.status(403).end()
+    }
+})
+
+
+//  Teacher Page
+router.get("/teacher-page/:id", async (req, res) => {
+    try {
+        const {id} = req.params
+
+        const teacher = await model.getTeacher(id*1)
+        const teacherCourses = await model.getTeacherCourses(id*1)
+
+      if(teacher){
+        res.send({teacher, teacherCourses})
+      }else{
+        res.send({mes: "this user does not exist"})
+      }            
+    } catch (err) {
+        console.log(err);
         res.statusMessage = err.message
         res.status(403).end()
     }
