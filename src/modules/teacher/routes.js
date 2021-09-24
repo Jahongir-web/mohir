@@ -176,4 +176,55 @@ router.delete("/video/:id", async (req, res) => {
     }
 })
 
+//  Add blog
+router.post('/blog', async (req, res) => {
+
+    const {title, content, user_id, categoryId} = req.body
+    try {
+      const photo = req.files.photo
+      const imgName = v4() + '.' + photo.mimetype.split("/")[1]
+  
+      photo.mv(path.join(uploadsDir, imgName), (error) => {
+              
+        if(error){
+          console.log(error)
+        }
+      })
+  
+      const blog = await model.addBlog(title, content, imgName, user_id*1)
+      
+      await categoryId.forEach(async(item) => {
+        const category = await model.addBlogCategory(item, blog.blog_id)
+      })
+      res.status(201).send(blog)
+  
+    } catch (error) {
+      console.error(error.message);
+      res.status(400)
+    }
+})
+
+// Delete blog
+router.delete("/blog/:id", async (req, res) => {
+    const {id} = req.params
+    try{ 
+
+        const delete_blog_category = await model.deleteBlogCategory(id*1)
+        const delete_blog = await model.deleteBlog(id*1)
+        
+        if(delete_blog){    
+            res.status(201).send(delete_blog)
+        }else{
+            res.status(400)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
+
 module.exports = router;

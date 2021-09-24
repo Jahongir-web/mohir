@@ -60,7 +60,9 @@ const model = {
       insert into comments (user_id, course_id, comment_content) values ($1, $2, $3) returning *
     `
     return row(sql, user_id, course_id, content)
-  } 
+  },
+
+  
 }
 
 

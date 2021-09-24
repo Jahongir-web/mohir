@@ -187,6 +187,44 @@ router.get('/filter/courses?:id?:level?:price', async (req, res) => {
 })
 
 
+// GET BLOGS
+router.get('/blogs', async (req, res) => {    
+    try{
+        const blogs = await model.allBlogs()
+        if(blogs){
+            let categories = await model.getCategoryBlogs()        
+            res.send({blogs, categories})
+        } else {
+            res.status(400).end()
+        }        
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+// GET blogById
+router.get('/blog/:id', async (req, res) => { 
+    const id = req.params.id * 1   
+    try{
+        const blog = await model.blog(id)
+        let categories = await model.categoryBlog(id)        
+        if(blog){
+            res.send({blog, categories})
+        } else {
+            res.status(400).end()
+        }        
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
 module.exports = router;
 
 

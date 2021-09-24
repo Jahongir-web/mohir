@@ -1,8 +1,14 @@
 const passport = require('passport')
 const Router = require("express").Router
 const { model } = require("./models")
+const { v4 } = require("uuid")
 const {sign, verify} = require("../../../function/jwt")
+const path = require("path")
+
 // const expressSession = require('express-session')
+
+const uploadsDir = path.join(__dirname, "../../static/files")
+
 
 const router = Router()
 
@@ -126,6 +132,8 @@ router.post('/users/course/comment', async (req, res) => {
       res.status(400).end()
   }
 })
+
+
 
 module.exports = router;
 

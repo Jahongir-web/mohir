@@ -64,6 +64,34 @@ const model = {
         `
         return row(sql, id)
     },
+
+    addBlog: (title, content, imgName, user_id) => {
+      const sql = `
+        insert into blogs (blog_title, blog_content, blog_image, user_id) values ($1, $2, $3, $4) returning *
+      `
+      return row(sql, title, content, imgName, user_id)
+    },
+    
+    addBlogCategory: (category_id, blog_id) => {
+      const sql = `
+      insert into categories_blog(category_id, blog_id) values ($1, $2) returning *
+      `
+      return row(sql, category_id, blog_id)
+    },
+    
+    deleteBlogCategory: (id) => {
+        const sql = `
+        delete from categories_blog where blog_id = $1 returning *
+        `
+        return row(sql, id)
+    },
+
+    deleteBlog: (id) => {
+        const sql = `
+        delete from blogs where blog_id = $1 returning *
+        `
+        return row(sql, id)
+    },
 }
 
 module.exports.model = model

@@ -111,7 +111,36 @@ const model = {
         course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join course_author on course_author.course_id = courses.course_id left join users as u on course_author.user_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where u.user_id = $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id asc limit 40
         `
         return rows(sql, id)
-    }    
+    },
+    
+    getCategoryBlogs: () => {
+        const sql = `
+        select blog_id, category_id, category_name from blogs join categories_blog using(blog_id) join categories using(category_id)
+        `
+        return rows(sql)
+    },
+    
+    
+    allBlogs: () => {
+        const sql = `
+        select blog_id, blog_title, blog_image, to_char(blogs.created_at, 'DD.MM.YYYY') as date, (u.first_name || ' ' || u.last_name) as author, u.user_avatar from blogs left join users as u using(user_id)
+        `
+        return rows(sql)
+    },
+
+    blog: (id) => {
+        const sql = `
+        select blog_id, blog_title, blog_image, blog_content, to_char(blogs.created_at, 'DD.MM.YYYY') as date, (u.first_name || ' ' || u.last_name) as author, u.user_avatar from blogs left join users as u using(user_id) where blog_id = $1
+        `
+        return row(sql, id)
+    },
+    
+    categoryBlog: (id) => {
+        const sql = `
+        select blog_id, category_id, category_name from blogs join categories_blog using(blog_id) join categories using(category_id) where categories_blog.blog_id = $1
+        `
+        return rows(sql, id)
+    },
 }
 
 module.exports.model = model
