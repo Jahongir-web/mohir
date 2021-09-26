@@ -225,6 +225,24 @@ router.get('/blog/:id', async (req, res) => {
 })
 
 
+// GET TEACHERS 
+router.get('/teachers', async (req, res) => {    
+    try{
+        const teachers = await model.allTeachers()
+        if(teachers){
+            let count_courses = await model.countCourses()        
+            res.send({teachers, count_courses})
+        } else {
+            res.status(400).end()
+        }        
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
 module.exports = router;
 
 

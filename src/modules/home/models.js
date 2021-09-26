@@ -141,8 +141,21 @@ const model = {
         `
         return rows(sql, id)
     },
+
+    allTeachers: () => {
+        const sql = `
+        select users.user_id, user_avatar, (first_name || ' ' || last_name) as fullname, count(p.course_id) as students from users join course_author as a on a.user_id = users.user_id  left join purchases as p on p.course_id = a.course_id where users.role_id = 1 group by users.user_id
+        `
+        return rows(sql)
+    },
+    
+    countCourses: () => {
+        const sql = `
+        select count(c.course_name), users.user_id from users left join course_author as a on a.user_id = users.user_id left join courses as c on c.course_id = a.course_id where users.role_id = 1 group by a.user_id, users.user_id 
+        `
+        return rows(sql)
+    },
 }
 
 module.exports.model = model
 
-// `select count(course_name) as courses, u.first_name, p.course_id  from courses join course_author as a on a.course_id = courses.course_id join users as u on u.user_id = a.user_id join purchases as p on p.course_id = courses.course_id where u.user_id = 3 group by u.first_name, p.course_id`

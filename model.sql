@@ -197,6 +197,7 @@ create table comments (
 
 --  24.09.2021
 -- // GET: blogItem("/blog/id"),
+-- // GET: allTeachers("/teachers"),
 
 
 -- // these have to do 
