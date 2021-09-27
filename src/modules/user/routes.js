@@ -37,7 +37,7 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
       const user = await model.signUpGoogle(data)
       if(user){
         const accessToken = await sign(user)      
-        res.json(accessToken).status(201)
+        res.json({token: accessToken}).status(201)
       }
     }
 
@@ -71,7 +71,7 @@ router.post("/signup", async (req, res) => {
     else{
       const user = await model.signUP(data)
       const accessToken = await sign(user)      
-      res.send(accessToken).status(201)      
+      res.send({token: accessToken}).status(201)      
     }        
   }
   catch(err){
@@ -87,7 +87,7 @@ router.post("/login", async (req, res) => {
     const user = await model.signIn(data)
     if(user){
       const accessToken = await sign(user)
-      res.send(accessToken)
+      res.send({token: accessToken})
     }
     else{
       res.status(401).send("login yoki parol xato")
