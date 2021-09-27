@@ -37,7 +37,7 @@ router.get('/google', passport.authenticate('google'), async(req, res) => {
       const user = await model.signUpGoogle(data)
       if(user){
         const accessToken = await sign(user)      
-        res.json({token: accessToken}).status(201)
+        res.json(accessToken).status(201)
       }
     }
 
