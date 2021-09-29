@@ -50,4 +50,19 @@ router.delete("/category/:id", async (req, res) => {
     }
 })
 
+// Delete Comment about course
+router.delete("/course/comment/:id", async (req, res) => {
+    const {id} = req.params
+    try{
+        const data = await model.deleteCommentCourse(id*1)
+        
+        res.send(data)
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
 module.exports = router;

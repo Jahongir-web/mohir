@@ -68,6 +68,21 @@ router.put("/course", async (req, res) => {
     }
 })
 
+// Publish course
+router.put("/course/publish/:id", async (req, res) => {
+    const {id} = req.params
+    try{
+        const publishCourse = model.publishCourse(id*1) 
+        res.status(201).end()     
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
 // Delete course
 router.delete("/course/:id", async (req, res) => {
     const {id} = req.params

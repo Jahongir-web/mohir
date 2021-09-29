@@ -14,6 +14,13 @@ const model = {
         const sql = `delete from categories where category_id = $1 returning *`
 
         return row(sql, id)
+    },
+
+    deleteCommentCourse: (id) => {
+
+        const sql = `delete from comments where comment_id = $1 returning *`
+
+        return row(sql, id)
     }
 }
 

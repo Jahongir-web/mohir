@@ -25,6 +25,13 @@ const model = {
         return row(sql, course_id, intro_link, duration, course_profit, course_requirements, for_who)
     },
 
+    publishCourse: (course_id) => {
+
+        const sql = `update courses set course_ready = true where course_id = $1 returning *`
+
+        return row(sql, course_id)
+    },
+
     deleteAuthor: (id) => {
 
         const sql = `delete from course_author where course_id = $1 returning *`
