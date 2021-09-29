@@ -13,7 +13,7 @@ const model = {
     AllCourses: () => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
-        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id asc limit 4`
+        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id asc limit 4`
 
         return rows(sql)
     },
@@ -60,7 +60,7 @@ const model = {
     freeCourses: () => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
-        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_price = '0' group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id desc limit 30`
+        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true and course_price = '0' group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id desc limit 30`
 
         return rows(sql)
     },
@@ -68,7 +68,7 @@ const model = {
     freeCoursesByCategory: (id) => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
-        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_price = '0' and c.category_id = $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id desc limit 30`
+        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true and course_price = '0' and c.category_id = $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar order by course_id desc limit 30`
 
         return rows(sql, id*1)
     },
@@ -76,7 +76,7 @@ const model = {
     searchCourses: (title) => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
-        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_name ilike $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar`
+        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true and course_name ilike $1 group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar`
 
         return rows(sql, `%${title}%`)
     },
