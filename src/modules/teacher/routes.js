@@ -172,6 +172,60 @@ router.post("/video", async (req, res) => {
     }
 })
 
+
+// Add quiz to course
+router.post("/quiz", async (req, res) => {
+    const {video_id, title, info} = req.body
+    try{ 
+        const quiz = await model.addQuiz(video_id*1, title, info)
+        
+        if(quiz){    
+            res.send(quiz)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
+// Add question to quiz
+router.post("/question", async (req, res) => {
+    const {quiz_id, text, type} = req.body
+    try{ 
+        const question = await model.addQuestion(quiz_id*1, text, type)
+        
+        if(question){    
+            res.send(question)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+// Add answers to question
+router.post("/answer", async (req, res) => {
+    const {question_id, text, is_correct} = req.body
+    try{ 
+        const answer = await model.addAnswer(question_id*1, text, is_correct)
+        
+        if(answer){    
+            res.send(answer)
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
 // Delete video
 router.delete("/video/:id", async (req, res) => {
     const {id} = req.params
@@ -190,6 +244,7 @@ router.delete("/video/:id", async (req, res) => {
         res.status(400).end()
     }
 })
+
 
 //  Add blog
 router.post('/blog', async (req, res) => {

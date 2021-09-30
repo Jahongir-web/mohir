@@ -57,6 +57,13 @@ const model = {
         return rows(sql, id)
     },
 
+    courseQuizz: (id) => {
+        const sql = `
+        select q.quiz_id, q.video_id, q.quiz_title, q.quiz_info from courses as c left join topics as t on c.course_id = t.course_id left join videos as v on t.topic_id = v.topic_id join quiz as q on q.video_id = v.video_id where c.course_id = $1
+        `
+        return rows(sql, id)
+    },
+
     freeCourses: () => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,

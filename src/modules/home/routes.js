@@ -68,10 +68,11 @@ router.get('/course/:id', async (req, res) => {
         })
         const topics = await model.courseTopics(id*1)
         const videos = await model.courseVideos(id*1)
+        const quizz = await model.courseQuizz(id*1)
         const comments = await model.courseComments(id*1)
         const similar_courses = await model.coursesByCategoryId(course.category_id)
         if(course){
-            res.send({course, topics, videos, authors, comments, similar_courses})
+            res.send({course, topics, videos, quizz, authors, comments, similar_courses})
         }
     }
     catch(err){

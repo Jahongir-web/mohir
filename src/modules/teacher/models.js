@@ -64,6 +64,24 @@ const model = {
 
         return row(sql, title, link, topic_id, material, info)
     },
+
+    addQuiz: (video_id, title, info) => {
+        const sql = `insert into quiz (video_id, quiz_title, quiz_info) values ($1, $2, $3) returning *`
+
+        return row(sql, video_id, title, info)
+    },
+
+    addQuestion: (quiz_id, text, type) => {
+        const sql = `insert into questions (quiz_id, question_text, type_id) values ($1, $2, $3) returning *`
+
+        return row(sql, quiz_id, text, type)
+    },
+
+    addAnswer: (question_id, text, is_correct) => {
+        const sql = `insert into answers (question_id, answer_text, is_correct) values ($1, $2, $3) returning *`
+
+        return row(sql, question_id, text, is_correct)
+    },
     
     deleteVideo: (id) => {
         const sql = `
