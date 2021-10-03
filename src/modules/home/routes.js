@@ -78,7 +78,7 @@ router.get('/course/:id', async (req, res) => {
     catch(err){
         console.log(err)
         res.statusMessage = err.message
-        res.status(403).end()
+        res.status(404).end()
     }
 })
 
