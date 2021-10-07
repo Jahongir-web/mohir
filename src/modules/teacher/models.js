@@ -83,6 +83,27 @@ const model = {
         return row(sql, question_id, text, is_correct)
     },
     
+    deleteAnswers: (id) => {
+        const sql = `
+            delete from answers where question_id = ANY(select question_id from questions where quiz_id = $1) returning*
+        `
+        return rows(sql, id)
+    },
+
+    deleteQuestion: (id) => {
+        const sql = `
+            delete from questions where quiz_id = $1 returning *
+        `
+        return rows(sql, id)
+    },
+
+    deleteQuiz: (id) => {
+        const sql = `
+            delete from quiz where quiz_id = $1 returning *
+        `
+        return row(sql, id)
+    },
+
     deleteVideo: (id) => {
         const sql = `
             delete from videos where video_id = $1 returning *

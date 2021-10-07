@@ -175,47 +175,48 @@ router.post("/video", async (req, res) => {
 
 // Add quiz to course
 router.post("/quiz", async (req, res) => {
-    const {video_id, title, info} = req.body
+    const {video_id, title, info, quiz_id, question_text, type, answers} = req.body
     try{ 
-        const quiz = await model.addQuiz(video_id*1, title, info)
-        
+        if(quiz_id) {
+            const question = await model.addQuestion(quiz_id*1, question_text, type)
+            const {question_id} = question
+            await answers.forEach(async(item) => {
+                const answer = await model.addAnswer(question_id, item.answer, item.is_correct)
+            })
+
+            res.send({question, answers})
+
+        } else {
+            const quiz = await model.addQuiz(video_id*1, title, info)
+            const {quiz_id} = quiz
+            const question = await model.addQuestion(quiz_id*1, question_text, type)
+            const {question_id} = question
+            await answers.forEach(async(item) => {
+                const answer = await model.addAnswer(question_id, item.answer, item.is_correct)
+            })           
+            res.send({quiz, question, answers})
+
+        }
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
+
+// Delete quiz
+router.delete("/quiz/:id", async (req, res) => {
+    const {id} = req.params
+    try{
+        const answers = await model.deleteAnswers(id*1)
+        const question = await model.deleteQuestion(id*1)
+        const quiz = await model.deleteQuiz(id*1)
         if(quiz){    
             res.send(quiz)
-        }
-    }
-    catch(err){
-        console.log(err)
-        res.statusMessage = err.message
-        res.status(400).end()
-    }
-})
-
-
-// Add question to quiz
-router.post("/question", async (req, res) => {
-    const {quiz_id, text, type} = req.body
-    try{ 
-        const question = await model.addQuestion(quiz_id*1, text, type)
-        
-        if(question){    
-            res.send(question)
-        }
-    }
-    catch(err){
-        console.log(err)
-        res.statusMessage = err.message
-        res.status(400).end()
-    }
-})
-
-// Add answers to question
-router.post("/answer", async (req, res) => {
-    const {question_id, text, is_correct} = req.body
-    try{ 
-        const answer = await model.addAnswer(question_id*1, text, is_correct)
-        
-        if(answer){    
-            res.send(answer)
+        }else{
+            res.status(400).end()
         }
     }
     catch(err){

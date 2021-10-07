@@ -57,6 +57,13 @@ const model = {
         return rows(sql, id)
     },
 
+    watchedVideos: (user_id) => {
+        const sql = `
+        select h.video_id, case when h.user_id = $1 then true end as show from videos_history as h right join videos as v on v.video_id = h.video_id where user_id = $1
+        `
+        return rows(sql, user_id)
+    },
+
     courseQuizz: (id) => {
         const sql = `
         select q.quiz_id, q.video_id, q.quiz_title, q.quiz_info from courses as c left join topics as t on c.course_id = t.course_id left join videos as v on t.topic_id = v.topic_id join quiz as q on q.video_id = v.video_id where c.course_id = $1
