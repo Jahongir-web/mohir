@@ -1,8 +1,7 @@
 const Router = require("express").Router
 const { model } = require("./models")
 const {sign, verify} = require("../../../function/jwt")
-const moment = require('moment')
-require("moment/locale/uz-latn")
+
 
 const router = Router()
 
@@ -85,6 +84,39 @@ router.get('/course/:id', async (req, res) => {
 })
 
 
+// Watch video 
+router.get('/course/video/:id', async (req, res) => {
+    const {id} = req.params
+    const {user_id} = req.headers
+    try{
+        var t;    
+        function time () {
+            t = setTimeout(async() => {
+                const addWatchedVideos = await model.addWatchedVideos(user_id*1, id*1)
+                console.log(addWatchedVideos);
+                
+            }, 7000); 
+        }        
+        function stop () {
+            clearTimeout(t)
+            t=null
+        }
+        const video = await model.getVideo(id*1)
+        res.send(video)        
+        const checkWatched = await model.checkWatched(user_id*1, id*1)       
+        
+        stop()
+        if(!checkWatched) {
+            time()       
+        }       
+    }
+    catch(err){
+        console.log(err)
+        res.statusMessage = err.message
+        res.status(400).end()
+    }
+})
+
 //  Teacher Page
 router.get("/teacher-page/:id", async (req, res) => {
     try {
@@ -139,7 +171,7 @@ router.get('/free/courses/category/:id', async (req, res) => {
 
 // Search course by name
 router.get('/search/course?:title', async (req, res) => {
-    const {title} = req.query  
+    const {title} = req.query   
     
     try{
         const data = await model.searchCourses(title)
@@ -162,7 +194,7 @@ router.get('/courses/category/:id', async (req, res) => {
         const data = await model.coursesByCategoryId(id*1)
         if(data){
             res.send(data)
-        }
+        }   
     }
     catch(err){
         console.log(err)

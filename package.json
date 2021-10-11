@@ -11,17 +11,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.22.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-session": "^1.17.2",
+    "get-video-duration": "^4.0.0",
+    "get-video-info": "^1.0.0",
+    "get-video-info-url": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.7.1",
+    "twilio": "^3.69.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

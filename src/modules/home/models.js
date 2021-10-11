@@ -57,6 +57,27 @@ const model = {
         return rows(sql, id)
     },
 
+    getVideo: (id) => {
+        const sql = `
+            select * from videos where video_id = $1
+        `
+        return row(sql, id)
+    },
+
+    checkWatched: (user_id, id) => {
+        const sql = `
+            select * from videos_history where user_id = $1 and video_id = $2
+        `
+        return row(sql, user_id, id)
+    },
+
+    addWatchedVideos: (user_id, id) => {
+        const sql = `
+            insert into videos_history(user_id, video_id) values ($1, $2) returning *
+        `
+        return row(sql, user_id, id)
+    },
+
     watchedVideos: (user_id) => {
         const sql = `
         select h.video_id, case when h.user_id = $1 then true end as show from videos_history as h right join videos as v on v.video_id = h.video_id where user_id = $1

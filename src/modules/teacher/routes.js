@@ -3,6 +3,7 @@ const path = require("path")
 const { v4 } = require("uuid")
 const { model } = require("./models")
 const {sign, verify} = require("../../../function/jwt")
+const axios = require('axios');
 
 const uploadsDir = path.join(__dirname, "../../static/files")
 
@@ -140,7 +141,27 @@ router.delete("/topic/:id", async (req, res) => {
 
 // Add video
 router.post("/video", async (req, res) => {
-    const {title, link, topic_id, info} = req.body    
+    const {title, link, topic_id, info} = req.body   
+
+    let duration 
+    const index = 31
+    const lastIndex = link.indexOf('?')
+    const videoId = link.slice(index, lastIndex)
+    
+    await axios({
+        method: 'get',
+        url: `https://v1.nocodeapi.com/jahongir/vimeo/JDaEcFUHvXDTjEox/videoInfo?video_id=${videoId}`, 
+        params: {},
+    }).then(function (response) {
+        const length = response.data.duration
+        const minute = Math.floor(length / 60)
+        const second = length % 60
+        duration = `${minute}:${second}`
+        return duration
+    }).catch(function (error) {
+        console.log(error);
+    })
+
     try{
         const {material} = req.files
         const fileName = material.size + '.' + material.name
@@ -151,14 +172,14 @@ router.post("/video", async (req, res) => {
             }
         })
 
-        const newVideo = await model.addVideo(title, link, topic_id*1, fileName, info) 
+        const newVideo = await model.addVideo(title, link, topic_id*1, fileName, info, duration) 
         if(newVideo){
             res.send(newVideo)
         }
     }
     catch(err){    
         try {
-            const newVideo = await model.addVideo(title, link, topic_id*1, fileName = null, info) 
+            const newVideo = await model.addVideo(title, link, topic_id*1, fileName = null, info, duration) 
             if(newVideo){
                 res.send(newVideo)            
             }else{
@@ -183,8 +204,7 @@ router.post("/quiz", async (req, res) => {
             await answers.forEach(async(item) => {
                 const answer = await model.addAnswer(question_id, item.answer, item.is_correct)
             })
-
-            res.send({question, answers})
+            res.status(201).end()
 
         } else {
             const quiz = await model.addQuiz(video_id*1, title, info)
@@ -194,7 +214,7 @@ router.post("/quiz", async (req, res) => {
             await answers.forEach(async(item) => {
                 const answer = await model.addAnswer(question_id, item.answer, item.is_correct)
             })           
-            res.send({quiz, question, answers})
+            res.status(201).end()
 
         }
     }

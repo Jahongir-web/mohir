@@ -8,27 +8,26 @@ const model = {
    return row(sql, username)
   },
 
-  checkEmail: ({email}) => {
-  const sql = `select * from users where user_email = $1`
+  checkPhone: ({phone}) => {
+  const sql = `select * from users where user_phone_number = $1`
 
-  return row(sql, email)
+  return row(sql, phone)
   },
 
-  signUP: ({name, last_name, username, email, password, role}) => {
+  signUP: ({ first_name, last_name, username, phone, role}) => {
 
     const Sql = `
-    insert into users (first_name, last_name, username, user_email, password, role_id) values ($1, $2, $3, coalesce($4, null), crypt($5, gen_salt('bf')), $6) returning *
+    insert into users (first_name, last_name, username, user_phone_number, role_id) values ($1, $2, $3, $4, $5) returning *
     `
-    return row(Sql, name, last_name, username, email, password, role)
+    return row(Sql, first_name, last_name, username, phone, role)
   },
 
-  signIn: ({username, password}) => {
+  signIn: (phone) => {
 
     const Sql = `
-    select * from users
-    where username = $1 and password = crypt($2, password)
-   `
-   return row(Sql, username, password)
+    select * from users where user_phone_number = $1`
+
+    return row(Sql, phone)
   },
 
   signUpGoogle: ({given_name, family_name, picture, email, sub}) => {

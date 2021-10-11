@@ -59,10 +59,10 @@ const model = {
         return row(sql, id)
     },
 
-    addVideo: (title, link, topic_id, material, info) => {
-        const sql = `insert into videos (video_name, video_link, topic_id, video_material, video_info) values ($1, $2, $3, coalesce($4, null), coalesce($5, null)) returning *`
+    addVideo: (title, link, topic_id, material, info, duration) => {
+        const sql = `insert into videos (video_name, video_link, topic_id, video_material, video_info, video_duration) values ($1, $2, $3, coalesce($4, null), coalesce($5, null), coalesce($6, null)) returning *`
 
-        return row(sql, title, link, topic_id, material, info)
+        return row(sql, title, link, topic_id, material, info, duration)
     },
 
     addQuiz: (video_id, title, info) => {
