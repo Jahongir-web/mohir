@@ -13,7 +13,7 @@ const model = {
     AllCourses: () => {
         const sql = `select courses.course_id,
         course_name,course_image,course_level,
-        course_duration, course_price, c.category_name, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar`
+        course_duration, course_price, c.category_name, c.category_id, u.first_name, u.last_name, u.user_avatar, count(video_name) as video_count from courses left join users as u on courses.author_id = u.user_id left join categories as c on courses.category_id = c.category_id left join topics as t on courses.course_id = t.course_id left join videos on t.topic_id = videos.topic_id where course_ready = true group by course_name, courses.course_id, c.category_id, u.first_name, u.last_name, u.user_avatar`
 
         return rows(sql)
     },
