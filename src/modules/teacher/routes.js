@@ -14,16 +14,15 @@ router.post("/course", async (req, res) => {
     const {title, info, level, tags, category_id, price, author_id} = req.body
         
     try{
-        // const photo = req.files.photo
-        // const imgName = v4() + '.' + photo.mimetype.split("/")[1]
-        const imgName = 'hello world!'
+        const photo = req.files.photo
+        const imgName = v4() + '.' + photo.mimetype.split("/")[1]
         
-        // photo.mv(path.join(uploadsDir, imgName), (error) => {
+        photo.mv(path.join(uploadsDir, imgName), (error) => {
             
-        //     if(error){
-        //         console.log(error)
-        //     }
-        // })
+            if(error){
+                console.log(error)
+            }
+        })
         const course = await model.addCourse(title, info, level, tags, category_id*1, price, author_id*1, imgName)
         
         if(course){            
