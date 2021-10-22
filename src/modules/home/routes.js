@@ -189,7 +189,6 @@ router.get('/search/course?:title', async (req, res) => {
 // Get courses by categoryId
 router.get('/courses/category/:id', async (req, res) => {
     const {id} = req.params
-    console.log(id);
     try{
         const data = await model.coursesByCategoryId(id*1)
         if(data){
