@@ -48,10 +48,8 @@ router.post("/signup", async (req, res) => {
 })
 
 router.post("/verify", async (req, res) => {
-  try{
-    
+  try{    
     const data = req.body
-
     if(data.code){
       
       client
