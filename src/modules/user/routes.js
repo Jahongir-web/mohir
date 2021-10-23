@@ -5,25 +5,19 @@ const { v4 } = require("uuid")
 const {sign, verify} = require("../../../function/jwt")
 const path = require("path")
 
-
 const uploadsDir = path.join(__dirname, "../../static/files")
 
-
 const router = Router()
-
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
 const authToken = process.env.TWILIO_AUTH_TOKEN;   // Your Auth Token from www.twilio.com/console
 const serviceId = process.env.SERVICE_ID
 
-
 const client = require('twilio')(accountSid, authToken);
-
 
 router.post("/signup", async (req, res) => {
   const data = req.body
-   try{   
-    
+   try{       
     const checkUsername = await model.checkUsername(data)
     const checkPhone = await model.checkPhone(data)
     if(checkUsername){
@@ -35,19 +29,16 @@ router.post("/signup", async (req, res) => {
     else{
       client 
       .verify
-          .services(serviceId)
-          .verifications
-          .create({
-            to: req.body.phone,
-            channel: 'sms'
-          })
-          .then((info) => {
-            res.status(200).send({info, data}) 
-          }).catch((err) => res.send(err.message))
-        
-    }     
-    
-    
+      .services(serviceId)
+      .verifications
+      .create({
+        to: req.body.phone,
+        channel: 'sms'
+      })
+      .then((info) => {
+        res.status(200).send({info, data}) 
+      }).catch((err) => res.send(err.message))        
+    }        
   }
   catch(err){
     console.log(err)
